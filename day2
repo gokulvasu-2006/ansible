@@ -1,0 +1,380 @@
+# Day 02 – Ansible Ad-hoc Commands and Modules
+
+## 1. Ansible Ad-hoc Commands
+
+**Definition:**
+
+Ad-hoc commands are one-time commands used to execute tasks on managed nodes without creating an Ansible playbook.
+
+**Syntax:**
+
+```bash
+ansible <host-pattern> -m <module> -a "<arguments>"
+```
+
+**Examples:**
+
+```bash
+ansible all -m ping
+
+ansible all -m command -a "hostname"
+
+ansible all -m command -a "uptime"
+
+ansible all -m command -a "free -h"
+
+ansible all -m command -a "df -h"
+```
+
+## 2. Command Module
+
+**Definition:**
+
+The command module executes commands on remote managed nodes without using a shell.
+
+**Syntax:**
+
+```bash
+ansible all -m command -a "<command>"
+```
+
+**Examples:**
+
+```bash
+ansible all -m command -a "hostname"
+
+ansible all -m command -a "date"
+
+ansible all -m command -a "uptime"
+
+ansible all -m command -a "free -h"
+
+ansible all -m command -a "df -h"
+```
+
+## 3. Shell Module
+
+**Definition:**
+
+The shell module executes commands through the remote shell. It supports shell operators such as pipes, redirects and command chaining.
+
+**Syntax:**
+
+```bash
+ansible all -m shell -a "<command>"
+```
+
+**Examples:**
+
+```bash
+ansible all -m shell -a "date && hostname"
+
+ansible all -m shell -a "df -h | grep /dev"
+
+ansible all -m shell -a "free -h && uptime"
+```
+
+### Difference Between Command and Shell
+
+| Command | Shell |
+|---|---|
+| Does not use a shell | Uses a shell |
+| No pipe support | Supports pipes |
+| No redirection support | Supports redirection |
+| Suitable for simple commands | Suitable for shell operations |
+
+## 4. Package Module
+
+**Definition:**
+
+The package module manages software packages on Linux managed nodes. It provides a generic interface across supported package managers.
+
+**Syntax:**
+
+```bash
+ansible all -m package -a "name=<package> state=<state>" --become
+```
+
+**Examples:**
+
+Install Git:
+
+```bash
+ansible all -m package -a "name=git state=present" --become
+```
+
+Install Nginx:
+
+```bash
+ansible all -m package -a "name=nginx state=present" --become
+```
+
+Remove Git:
+
+```bash
+ansible all -m package -a "name=git state=absent" --become
+```
+
+Verify Git:
+
+```bash
+ansible all -m command -a "git --version"
+```
+
+## 5. Service Module
+
+**Definition:**
+
+The service module manages services on remote Linux systems, including starting, stopping, restarting and enabling services.
+
+**Syntax:**
+
+```bash
+ansible all -m service -a "name=<service> state=<state>" --become
+```
+
+**Examples:**
+
+Start Nginx:
+
+```bash
+ansible all -m service -a "name=nginx state=started" --become
+```
+
+Stop Nginx:
+
+```bash
+ansible all -m service -a "name=nginx state=stopped" --become
+```
+
+Restart Nginx:
+
+```bash
+ansible all -m service -a "name=nginx state=restarted" --become
+```
+
+Enable Nginx at startup:
+
+```bash
+ansible all -m service -a "name=nginx enabled=yes" --become
+```
+
+Start and enable Nginx:
+
+```bash
+ansible all -m service -a "name=nginx state=started enabled=yes" --become
+```
+
+Verify Nginx:
+
+```bash
+ansible all -m command -a "systemctl is-active nginx" --become
+```
+
+## 6. File Module
+
+**Definition:**
+
+The file module manages files, directories, symbolic links and file permissions on managed nodes.
+
+**Syntax:**
+
+```bash
+ansible all -m file -a "path=<path> state=<state>" --become
+```
+
+**Examples:**
+
+Create a directory:
+
+```bash
+ansible all -m file -a "path=/opt/devops-lab state=directory mode=0755" --become
+```
+
+Create an empty file:
+
+```bash
+ansible all -m file -a "path=/opt/devops-lab/test.txt state=touch" --become
+```
+
+Change permissions:
+
+```bash
+ansible all -m file -a "path=/opt/devops-lab/test.txt mode=0644" --become
+```
+
+Delete a file:
+
+```bash
+ansible all -m file -a "path=/opt/devops-lab/test.txt state=absent" --become
+```
+
+Delete a directory:
+
+```bash
+ansible all -m file -a "path=/opt/devops-lab state=absent" --become
+```
+
+## 7. User Module
+
+**Definition:**
+
+The user module manages user accounts on remote managed nodes.
+
+**Syntax:**
+
+```bash
+ansible all -m user -a "name=<username> state=<state>" --become
+```
+
+**Examples:**
+
+Create a user:
+
+```bash
+ansible all -m user -a "name=devops state=present" --become
+```
+
+Delete a user:
+
+```bash
+ansible all -m user -a "name=devops state=absent" --become
+```
+
+Verify user:
+
+```bash
+ansible all -m command -a "id devops"
+```
+
+## 8. Copy Module
+
+**Definition:**
+
+The copy module copies files from the Ansible control node to remote managed nodes.
+
+**Syntax:**
+
+```bash
+ansible all -m copy -a "src=<source> dest=<destination>" --become
+```
+
+**Examples:**
+
+Create a file on the control node:
+
+```bash
+echo "Welcome to Ansible Automation" > test.txt
+```
+
+Copy the file to managed nodes:
+
+```bash
+ansible all -m copy -a "src=test.txt dest=/opt/devops-lab/test.txt mode=0644" --become
+```
+
+Verify copied file:
+
+```bash
+ansible all -m command -a "cat /opt/devops-lab/test.txt"
+```
+
+## 9. Setup Module
+
+**Definition:**
+
+The setup module collects system information (facts) from managed nodes, including operating system, hostname, network interfaces, memory and processor details.
+
+**Examples:**
+
+Collect all facts:
+
+```bash
+ansible all -m setup
+```
+
+Collect OS information:
+
+```bash
+ansible all -m setup -a "filter=ansible_distribution*"
+```
+
+Collect hostname:
+
+```bash
+ansible all -m setup -a "filter=ansible_hostname"
+```
+
+Collect IP address:
+
+```bash
+ansible all -m setup -a "filter=ansible_default_ipv4"
+```
+
+## 10. Privilege Escalation (--become)
+
+**Definition:**
+
+The `--become` option allows Ansible to execute tasks with elevated privileges, generally using sudo.
+
+**Examples:**
+
+```bash
+ansible all -m package -a "name=git state=present" --become
+
+ansible all -m service -a "name=nginx state=started" --become
+
+ansible all -m file -a "path=/opt/test state=directory" --become
+```
+
+## 11. Idempotency
+
+**Definition:**
+
+Idempotency means that executing the same Ansible task multiple times maintains the desired system state without making unnecessary changes.
+
+**Example:**
+
+```bash
+ansible all -m package -a "name=git state=present" --become
+```
+
+First execution: Installs Git if it is not installed.
+
+Second execution: No changes if Git is already installed.
+
+## 12. Important Ansible Commands
+
+```bash
+# Check Ansible version
+ansible --version
+
+# List inventory
+ansible-inventory --list
+
+# Test connectivity
+ansible all -m ping
+
+# Check hostname
+ansible all -m command -a "hostname"
+
+# Check uptime
+ansible all -m command -a "uptime"
+
+# Check memory
+ansible all -m command -a "free -h"
+
+# Check disk
+ansible all -m command -a "df -h"
+
+# Check operating system
+ansible all -m command -a "cat /etc/os-release"
+
+# Collect system facts
+ansible all -m setup
+
+# Execute command on a specific group
+ansible aws_servers -m command -a "uptime"
+```
+
+**End of Day 02 – Ansible Ad-hoc Commands and Modules**
