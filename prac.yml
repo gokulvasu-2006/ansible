@@ -1,0 +1,20 @@
+---
+- name: webserver practise
+  hosts: all
+  become: yes
+
+  vars:
+    cont: /opt/ansible-practise
+
+  tasks:
+    - name: create directory for webserver
+      file:
+        path: "{{ cont }}"
+        state: directory
+        mode: '0775'
+
+    - name: create file
+      copy: 
+        content: "Welcome to ansible automation buddy"
+        dest: /opt/ansible-practise/welcome.txt
+        mode: '0644'

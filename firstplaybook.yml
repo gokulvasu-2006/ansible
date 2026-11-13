@@ -1,0 +1,14 @@
+---
+- name: create  first playbook
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: display message
+      debug:
+        msg: "Working fine"
+    - name: create a directory
+      file:
+        path: /tmp/day3
+        state: directory
+        mode: '0755'

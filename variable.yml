@@ -1,0 +1,23 @@
+---
+- name: Ansible Variables
+  hosts: all
+  become: yes
+
+  vars:
+    appname: devops-app
+    app_directory: /opt/devops-lab
+
+  tasks:
+    - name: display message
+      debug:
+        msg: "Deploying {{ appname }}"
+    - name: create app directory
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        mode: '0755'
+    - name: "create app info file"
+      copy:
+        content: "App: {{ appname }}"
+        dest: "{{ app_directory }}/info.txt"
+        mode: '0644'

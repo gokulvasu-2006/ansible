@@ -1,0 +1,17 @@
+---
+- name: ansible handlers practise
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: create app config
+      copy:
+        content: "welcome to ansible automation"
+        dest: /tmp/app.conf
+      notify: config changed
+
+  handlers:
+    - name: config changed
+      debug:
+        msg: "config updated"
+
