@@ -1,0 +1,126 @@
+# Day 3 – Ansible Playbooks
+
+## 1. Ansible Playbook
+A playbook is a YAML file that contains instructions to automate tasks on managed nodes.
+
+**File extension:** `.yml` or `.yaml`
+
+## 2. Basic Playbook Structure
+
+```yaml
+---
+- name: Configure webservers
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Create directory
+      file:
+        path: /tmp/demo
+        state: directory
+        mode: '0755'
+```
+
+### Important Keywords
+
+| Keyword | Definition |
+|---|---|
+| `---` | Starts a YAML document |
+| `name` | Describes a play or task |
+| `hosts` | Specifies target machines |
+| `become` | Enables privilege escalation (sudo) |
+| `tasks` | Contains operations to execute |
+| `vars` | Defines variables |
+| `notify` | Triggers a handler |
+| `handlers` | Contains tasks triggered by notifications |
+
+## 3. Common Modules
+
+| Module | Purpose |
+|---|---|
+| `file` | Creates or manages files and directories |
+| `copy` | Copies files or writes content |
+| `package` | Installs or removes packages |
+| `service` | Manages services |
+| `debug` | Displays messages |
+| `template` | Creates files using Jinja2 templates |
+
+## 4. Variables
+
+Variables store reusable values in a playbook.
+
+Example:
+
+```yaml
+vars:
+  app_name: devops
+  app_path: /opt/devops
+
+tasks:
+  - name: Display application name
+    debug:
+      msg: "Application is {{ app_name }}"
+```
+
+**`{{ variable_name }}`** is used to access a variable.
+
+## 5. Handlers
+
+Handlers are special tasks that run only when notified by another task that reports a change.
+
+Example:
+
+```yaml
+tasks:
+  - name: Update configuration
+    copy:
+      content: "Welcome"
+      dest: /tmp/app.conf
+    notify: Restart application
+
+handlers:
+  - name: Restart application
+    debug:
+      msg: "Configuration changed!"
+```
+
+- `notify` triggers a handler.
+- Handlers run only when notified.
+- If the task reports no change, the handler does not run.
+
+## 6. Idempotency
+
+Idempotency means running the same playbook multiple times does not make unnecessary changes.
+
+Example: If a directory already exists with the required settings, Ansible does not recreate it unnecessarily.
+
+## 7. Important Commands
+
+```bash
+# Check YAML/playbook syntax
+ansible-playbook --syntax-check playbook.yml
+
+# Run playbook
+ansible-playbook playbook.yml
+
+# Preview changes
+ansible-playbook playbook.yml --check
+
+# Run with verbose output
+ansible-playbook playbook.yml -v
+
+# List targeted hosts
+ansible-playbook playbook.yml --list-hosts
+
+# List tasks
+ansible-playbook playbook.yml --list-tasks
+```
+
+## 8. YAML Rules
+
+1. Use spaces, never tabs.
+2. Maintain proper indentation.
+3. Use a colon after mapping keys.
+4. Use hyphens (`-`) for list items.
+5. Keep module parameters under their module.
+6. Use quotes for file permission values like `'0755'`.
