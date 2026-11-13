@@ -1,0 +1,26 @@
+# Ansible Infrastructure Automation
+
+## Day 1 - Ansible Fundamentals
+
+### Environment
+- Control Node: Local Linux VM
+- Managed Nodes: AWS EC2 instances
+- Communication: SSH
+
+### Topics Practiced
+- Ansible installation
+- Inventory configuration
+- SSH connectivity
+- Ad-hoc commands
+- Ansible modules
+- Linux server information gathering
+
+### Commands Practiced
+- ansible --version
+- ansible-inventory --list
+- ansible all -m ping
+- ansible all -m command -a "uptime"
+- ansible all -m command -a "df -h"
+
+### ansible Syntax : ansible all -m command -a "free -g"
+### here ansible -> ansible cmd , all -> targerting hosts , -m -> module , command -> module name , -a -> argument , "free -g" -> shell command
