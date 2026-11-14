@@ -1,0 +1,84 @@
+# Day 4 – Ansible Notes
+
+## 1. Loops (`loop`)
+- Used to execute a task multiple times with different values.
+- `item` is the default loop variable.
+
+Example:
+```yaml
+- name: Create directories
+  ansible.builtin.file:
+    path: "/opt/{{ item }}"
+    state: directory
+  loop:
+    - devops
+    - testing
+    - monitoring
+```
+
+## 2. Conditions (`when`)
+- Used to execute tasks based on a condition.
+- Task runs only when the condition is true.
+
+Example:
+```yaml
+- name: Install nginx
+  ansible.builtin.dnf:
+    name: nginx
+    state: present
+  when: ansible_os_family == "RedHat"
+```
+
+## 3. Ansible Facts
+- Facts are system information collected from managed nodes.
+- Facts are gathered automatically by default.
+- `setup` module is used to collect facts.
+
+Important facts:
+- `ansible_hostname` – Hostname
+- `ansible_distribution` – OS distribution
+- `ansible_os_family` – OS family
+- `ansible_default_ipv4.address` – Default IPv4 address
+- `ansible_memtotal_mb` – Total memory in MB
+
+Commands:
+```bash
+ansible all -m setup
+ansible all -m setup -a "filter=ansible_distribution"
+ansible all -m setup -a "filter=ansible_hostname"
+```
+
+## 4. Jinja2 Templates
+- Jinja2 is used to create dynamic configuration files.
+- Template files use the `.j2` extension.
+- `{{ variable }}` inserts variable values.
+- Ansible uses the `template` module to deploy templates.
+
+Example template:
+```jinja2
+Hostname: {{ ansible_hostname }}
+OS: {{ ansible_distribution }}
+IP: {{ ansible_default_ipv4.address }}
+```
+
+Template module:
+```yaml
+- name: Deploy template
+  ansible.builtin.template:
+    src: templates/server-info.j2
+    dest: /etc/server-info
+    owner: root
+    group: root
+    mode: '0644'
+```
+
+## 5. Important Commands
+
+```bash
+ansible all -m ping
+ansible all -m setup
+ansible-playbook day-04/facts.yml
+ansible-playbook day-04/template-playbook.yml
+ansible all -m command -a "cat /etc/server-info" --become
+```
+

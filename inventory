@@ -1,6 +1,7 @@
 [web]
-node1 ansible_host=100.53.7.239
-node2 ansible_host=54.87.156.226
+node1 ansible_host=35.175.183.91
+node2 ansible_host=34.224.65.37
+
 
 [all:vars]
 ansible_user=ec2-user

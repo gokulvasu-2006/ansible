@@ -1,0 +1,16 @@
+---
+- name: Create multilpe directory using loops
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: create directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - /opt/devops
+        - /opt/testing
+        - /opt/monitoring
+      
