@@ -1,0 +1,14 @@
+---
+- name: practising loops
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: create user using loops
+      user:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - devops
+        - developer
+        - tester

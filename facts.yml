@@ -1,0 +1,9 @@
+---
+- name: Facts
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Display hostname
+      debug:
+        msg: "My hostname is {{ ansible_hostname }}"

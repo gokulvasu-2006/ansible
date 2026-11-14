@@ -1,0 +1,13 @@
+---
+- name: jinja template
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: server info
+      ansible.builtin.template:
+        src: templates/serverinfo.j2
+        dest: /etc/server-info
+        owner: root
+        group: root
+        mode: '0644'

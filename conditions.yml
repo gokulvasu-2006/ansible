@@ -1,0 +1,11 @@
+---
+- name: Practising Conditions
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install nginx
+      ansible.builtin.dnf: 
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
