@@ -1,0 +1,9 @@
+---
+- name: configure web servers
+  hosts: rhel
+  become: yes
+
+  roles: 
+    - role: nginx
+      vars: 
+      nginx_port: 8080
