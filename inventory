@@ -1,6 +1,6 @@
-[web]
-node1 ansible_host=35.175.183.91
-node2 ansible_host=34.224.65.37
+[rhel]
+node1 ansible_host=13.218.127.177
+node2 ansible_host=54.160.146.56
 
 
 [all:vars]
