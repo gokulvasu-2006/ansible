@@ -1,6 +1,6 @@
 server {
-   listen "{{ nginx_port1 }}";
-   listen [::]:80;
+   listen "{{ nginx_port }}";
+   listen [::]:{{ nginx_port }};
    server_name localhost;
 
    location / {

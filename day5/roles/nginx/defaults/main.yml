@@ -2,5 +2,5 @@
 # defaults file for day5/roles/nginx
 nginx_package: nginx
 nginx_service: nginx
-nginx_port1: 80
+nginx_port: 80
 

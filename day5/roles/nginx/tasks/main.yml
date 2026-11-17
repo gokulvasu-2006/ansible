@@ -18,3 +18,15 @@
     group: root
     mode: '0644'
   notify: Restart nginx
+
+- name: Install SE Linux management tools
+  ansible.builtin.dnf:
+    name: policycoreutils-python-utils
+    state: present
+
+- name: Allow Nginx port in SElinux
+  community.general.seport:
+    ports: "{{ nginx_port }}"
+    proto: tcp
+    setype: http_port_t
+    state: present
