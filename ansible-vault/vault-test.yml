@@ -1,0 +1,15 @@
+---
+- name: Test Vault
+  hosts: all
+  become: yes
+
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Display db username and pwd
+      ansible.builtin.debug:
+        var: db_username
+    - name: confirm db config
+      ansible.builtin.debug:
+        msg: "Db host is {{ db_host }} and port is {{ db_port }}"
