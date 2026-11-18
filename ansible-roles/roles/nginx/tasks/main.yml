@@ -30,3 +30,15 @@
     proto: tcp
     setype: http_port_t
     state: present
+
+- name: verify nginx HTTP Response
+  ansible.builtin.uri:
+    url: "http://localhost:{{ nginx_port }}"
+    status_code: 200
+    return_content: yes
+  register: nginx_health
+
+- name: Display nginx health status
+  ansible.builtin.debug:
+    msg: "Nginx is healthy on {{ inventory_hostname }}"
+  when: nginx_health.status == 200

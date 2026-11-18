@@ -6,4 +6,4 @@
   roles: 
     - role: nginx
       vars: 
-      nginx_port: 8080
+        nginx_port: 8080

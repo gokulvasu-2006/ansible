@@ -1,4 +1,13 @@
+# SSH private keys
 *.pem
 *.key
+
+# Ansible temporary files
 *.retry
+*.decrypted
+
+# Vault password
 .vault_pass
+
+# inventory
+/inventory
